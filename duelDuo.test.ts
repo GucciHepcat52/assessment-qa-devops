@@ -23,12 +23,14 @@ test('Title shows up when page loads', async () => {
 test('click draw button', async () => {
     const drawButton = await driver.findElement(By.id("draw"))
     await drawButton.click()
-    await driver.sleep(3000)
+    driver.sleep(2000)
 })
 
 test('draw button displays id=choices div', async () => {
+    const drawButton = await driver.findElement(By.id("draw"))
+    await drawButton.click()
     const choices = await driver.findElement(By.id("choices"))
     const choicesDisplayed = await choices.isDisplayed()
-    expect(choicesDisplayed).toBe(false)
+    expect(choicesDisplayed).toBe(true);
     await driver.sleep(3000)
 })
