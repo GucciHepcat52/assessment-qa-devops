@@ -6,15 +6,15 @@ const { bots, playerRecord } = require("./data");
 const { shuffleArray } = require("./utils");
 
 // include and initialize the rollbar library with your access token
-var Rollbar = require('rollbar')
+var Rollbar = require("rollbar");
 var rollbar = new Rollbar({
-  accessToken: '47595bdec0e3477895651c0f9521a68c',
+  accessToken: "47595bdec0e3477895651c0f9521a68c",
   captureUncaught: true,
   captureUnhandledRejections: true,
-})
+});
 
 // record a generic message and send it to Rollbar
-rollbar.log('Hello world!')
+rollbar.log("Hello world!");
 
 const app = express();
 
@@ -23,9 +23,13 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 app.get("/api/robots", (req, res) => {
   try {
+    rollbar.log("robots sent successfully", {
+      author: "Dallin",
+    });
     res.status(200).send(botsArr);
   } catch (error) {
     console.log("ERROR GETTING BOTS", error);
+    rollbar.warning("Not able to get bots");
     res.sendStatus(400);
   }
 });
@@ -35,9 +39,13 @@ app.get("/api/robots/five", (req, res) => {
     let shuffled = shuffleArray(bots);
     let choices = shuffled.slice(0, 5);
     let compDuo = shuffled.slice(6, 8);
+    rollbar.log("successfully sending info", {
+      author: "Dallin",
+    });
     res.status(200).send({ choices, compDuo });
   } catch (error) {
     console.log("ERROR GETTING FIVE BOTS", error);
+    rollbar.error("Not getting selected bots");
     res.sendStatus(400);
   }
 });
@@ -83,9 +91,13 @@ app.post("/api/duel", (req, res) => {
 
 app.get("/api/player", (req, res) => {
   try {
+    rollbar.log("player record was recorded", {
+      author: "Dallin",
+    });
     res.status(200).send(playerRecord);
   } catch (error) {
     console.log("ERROR GETTING PLAYER STATS", error);
+    rollbar.critical("Not able to get player stats");
     res.sendStatus(400);
   }
 });
